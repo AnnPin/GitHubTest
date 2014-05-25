@@ -1,0 +1,46 @@
+Gitの使い方
+まず、Gitがインストールされている環境であることを確認する。
+基本的に、git init -> git pull -> 編集 -> git pushで完結
+
+初期設定を済ませる
+	git config —global user.name “userName”
+	git config —global user.email “email@address.com”
+	git config —global color.ui true
+	git config -l （確認用）
+
+
+サーバー側で大本のリポジトリをつくる
+	mkdir sharedRepo.git
+	cd sharedRepo.git
+	git init —bare
+	cd ../
+	
+	mkdir originalRepo
+	cd originalRepo
+	git init
+	git remote add sharedRepo(任意のリポジトリ名) ../sharedRepo.git
+	vi test.txt
+	git add .
+	git commit
+	（コミットコメント）
+	git push sharedRepo(任意のリポジトリ名) master(ブランチ名)
+	
+
+クライアント端末側で作業する準備をする
+	mkdir localRepo
+	cd localRepo
+	git init
+	git remote add sharedRepo(任意のリポジトリ名) ServerUserName@ServerAddress:RepositoryURL.git
+	git pull sharedRepo(任意のリポジトリ名) master(ブランチ名)
+	— リポジトリの内容が取得できた —
+	vi test2.txt
+	git add .
+	git commit
+	（コミットコメント）
+	git push sharedRepo(任意のリポジトリ名) master(ブランチ名)
+	— これにより、他の端末からgit pull sharedRepo(任意のリポジトリ名) master(ブランチ名) —
+	— を実行することで、クライアント端末側で行った変更を反映できる —
+	
+
+単純に、クライアント端末にリポジトリのコピーを作りたい場合
+	git clone ServerUserName@ServerAddress:RepositoryURL.git newDirectoryName
